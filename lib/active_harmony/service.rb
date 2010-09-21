@@ -90,10 +90,10 @@ module ActiveHarmony
       puts "[ActiveHarmony]    Method:   #{method}"
       puts "[ActiveHarmony]    Headers:  #{headers.inspect}"
       puts "[ActiveHarmony]    Data:     #{data.inspect}"
-      if Rails.env.test?
-        data = retrieve_with_http(url, method, headers, data)
-      else
+      if defined?(Rails) && !Rails.env.test?
         data = retrieve_with_typhoeus(url, method, headers, data)
+      else
+        data = retrieve_with_http(url, method, headers, data)
       end
       # puts "\e\[32m"
       # puts data
