@@ -12,10 +12,16 @@ Gem::Specification.new do |s|
   s.date = %q{2010-09-21}
   s.description = %q{Active Harmony is a Ruby library that takes care of synchronizing changes between local Ruby objects and remote REST services.}
   s.email = %q{vojto@rinik.net}
+  s.extra_rdoc_files = [
+    "LICENSE",
+     "README.markdown"
+  ]
   s.files = [
-    ".rvmrc",
+    ".bundle/config",
      "Gemfile",
      "Gemfile.lock",
+     "LICENSE",
+     "README.markdown",
      "Rakefile",
      "VERSION",
      "active_harmony.gemspec",

@@ -1,3 +1,5 @@
+require 'mongoid'
+
 require 'active_harmony/queue'
 require 'active_harmony/queue_item'
 require 'active_harmony/service'
