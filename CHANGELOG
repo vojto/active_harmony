@@ -1,0 +1,5 @@
+1.0.1
+Fixes in Gemfile that caused problems with WebMock.
+
+1.0.0
+Initial version
