@@ -1,10 +1,10 @@
 module ActiveHarmony
   class Service
     attr_accessor :base_url, :header, :root, :auth
-    
+
     ############################################################
     # Initialization & Configuration
-    
+
     ##
     # Initializes new Rest Service
     def initialize
@@ -14,7 +14,7 @@ module ActiveHarmony
       @object_names = []
       @root = nil
     end
-    
+
     ##
     # Adds header
     # @param [String] Header name
@@ -22,10 +22,10 @@ module ActiveHarmony
     def set_header(name, value)
       @header[name] = value
     end
-    
+
     ############################################################
     # Generating URLs
-    
+
     ##
     # Generates url for REST service
     # @param [Symbol] Action: show, list, update or destroy
@@ -34,7 +34,7 @@ module ActiveHarmony
     # @return [Service::ServiceUrl] Generated URL
     def generate_rest_url(action, object_type, object_id = nil)
       url = custom_url_for(object_type, action)
-      
+
       method = if action == :list || action == :show
         :get
       elsif action == :create
@@ -42,7 +42,7 @@ module ActiveHarmony
       elsif action == :update
         :put
       end
-      
+
       if url
         url.request_method ||= method
         if object_id
@@ -50,7 +50,7 @@ module ActiveHarmony
         end
         return url if url
       end
-      
+
       path = ''
       path += @contexts.collect { |name, value|
         "#{name}/#{value}"
@@ -62,10 +62,10 @@ module ActiveHarmony
         path += "#{object_type.to_s.pluralize}/#{object_id.to_s}"
       end
       url = generate_url(path)
-      
+
       ServiceUrl.new(url, method)
     end
-    
+
     ##
     # Generates URL for path using base_url
     # @param [String] Path
@@ -76,10 +76,10 @@ module ActiveHarmony
       end
       path = "#{@base_url}/#{path}"
     end
-    
+
     ############################################################
     # Retrieving data from networks
-    
+
     ##
     # Retrieves data from URL
     # @param [String] URL
@@ -95,12 +95,9 @@ module ActiveHarmony
       else
         data = retrieve_with_http(url, method, headers, data)
       end
-      # puts "\e\[32m"
-      # puts data
-      # puts "\e\[0m"
       data
     end
-    
+
     def retrieve_with_typhoeus(url, method, headers, data)
       request_options = {:headers => @header.merge(headers),
                         :body => data}
@@ -109,7 +106,7 @@ module ActiveHarmony
       response = Typhoeus::Request.send(method, url, request_options)
       response.body
     end
-    
+
     def retrieve_with_http(url, method, headers, data)
       url = URI.parse(url)
       response = nil
@@ -123,10 +120,10 @@ module ActiveHarmony
       end
       response
     end
-    
+
     ############################################################
     # Parsing response
-    
+
     ##
     # Parses XML
     # @param [String] XML
@@ -139,7 +136,7 @@ module ActiveHarmony
         return {}
       end
     end
-    
+
     def find_object_in_result(result, object_type, action)
       data = result
       # puts result
@@ -158,10 +155,10 @@ module ActiveHarmony
         data[path] # Pluralize? When? action?
       end
     end
-    
+
     ############################################################
     # Working with REST services
-    
+
     ##
     # List collection of remote objects
     # @param [Symbol] Object type
@@ -172,7 +169,7 @@ module ActiveHarmony
       parsed_result = parse_xml(result)
       find_object_in_result(parsed_result, object_type, :list)
     end
-    
+
     ##
     # Shows remote object
     # @param [Symbol] Object type
@@ -184,7 +181,7 @@ module ActiveHarmony
       parsed_result = parse_xml(result)
       find_object_in_result(parsed_result, object_type, :show)
     end
-    
+
     ##
     # Updates remote object
     # @param [Symbol] Object type
@@ -197,7 +194,7 @@ module ActiveHarmony
       result = retrieve(url.path, url.method, {'Content-type' => 'application/xml'}, xml_data)
       find_object_in_result(result, object_type, :update)
     end
-    
+
     ##
     # Creates a new remote object
     # @param [Symbol] Object type
@@ -210,10 +207,10 @@ module ActiveHarmony
       parsed_result = parse_xml(result)
       find_object_in_result(parsed_result, object_type, :create)
     end
-    
+
     ############################################################
     # Setting contexts
-    
+
     ##
     # Set contexts for service
     # @param [Hash] Contexts
@@ -222,16 +219,16 @@ module ActiveHarmony
         @contexts[name.to_sym] = value
       end
     end
-    
+
     ##
     # Clears contexts for service
     def clear_contexts
       @contexts = {}
     end
-    
+
     ############################################################
     # Setting custom URLs
-    
+
     ##
     # Adds custom path
     # @param [Symbol] Object type
@@ -245,7 +242,7 @@ module ActiveHarmony
         :method => method
       }
     end
-    
+
     ##
     # Returns custom path
     # @param [Symbol] Object type
@@ -260,10 +257,10 @@ module ActiveHarmony
         ServiceUrl.new(generate_url(path[:path]), path[:method])
       end
     end
-    
+
     ############################################################
     # Setting custom object names for objects
-    
+
     ##
     # Adds new name for some type of object
     # @param [Symbol] Object type
@@ -276,7 +273,7 @@ module ActiveHarmony
         :new_object_name => new_object_name.to_s
       }
     end
-   
+
     ##
     # Returns custom object name for action
     # @param [Symbol] Object type

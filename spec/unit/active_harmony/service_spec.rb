@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require "spec_helper"
-require "webmock/rspec"
 
 module ActiveHarmony
   describe Service do
@@ -10,7 +9,7 @@ module ActiveHarmony
       @base_url = "http://chunky.bacon"
       @service.base_url = @base_url
     end
-    
+
     ############################################################
     # Initialization
     describe "#initialize" do
@@ -18,7 +17,7 @@ module ActiveHarmony
         @service.should be_a(Service)
       end
     end
-  
+
     ############################################################
     # URL and header configuration
     describe "#base_url=" do
@@ -27,12 +26,12 @@ module ActiveHarmony
         @service.base_url.should == @base_url
       end
     end
-  
+
     describe "#header=" do
       it "should be empty hash as default" do
         @service.header.should == {}
       end
-      
+
       it "should set extra headers for the service" do
         extra_header = {
           "Header name" => "Header Value"
@@ -41,14 +40,14 @@ module ActiveHarmony
         @service.header.should == extra_header
       end
     end
-    
+
     describe "#set_header" do
       it "should set one header" do
         @service.set_header("test_header", "bla")
         @service.header["test_header"].should == "bla"
       end
     end
-      
+
     ##
     # Generating URLs
     describe "#generate_rest_url" do
@@ -56,30 +55,30 @@ module ActiveHarmony
         @service.generate_rest_url(:list, :my_object).path.should == \
           "#{@base_url}/my_objects"
       end
-      
+
       it "should generate show url" do
         @service.generate_rest_url(:show, :my_object, 123).path.should == \
           "#{@base_url}/my_objects/123"
       end
-      
+
       it "should generate update url" do
         @service.generate_rest_url(:update, :my_object, 123).path.should == \
           "#{@base_url}/my_objects/123"
       end
     end
-    
+
     describe "#generate_url" do
       it "should generate url for path" do
         @service.generate_url("rainbow").should == \
           "#{@base_url}/rainbow"
       end
-      
+
       it "should generate url for path with slash at beginning" do
         @service.generate_url("/rainbow").should == \
           "#{@base_url}/rainbow"
       end
     end
-    
+
     ##
     # Retrieving data
     describe "#retrieve" do
@@ -89,7 +88,7 @@ module ActiveHarmony
         stub_request(:get, "http://chunky.bacon/foo.bar").to_return(:body => response)
         @service.retrieve(url).should == response
       end
-      
+
       it "should use header while making the request" do
         url = "http://chunky.bacon/bar.foo"
         stub_request(:get, url).
@@ -99,7 +98,7 @@ module ActiveHarmony
         @service.retrieve(url).should == "Success!"
       end
     end
-    
+
     describe "#list" do
       it "should list objects" do
         objects = <<-EOF
@@ -123,7 +122,7 @@ EOF
         ]
       end
     end
-    
+
     describe "#show" do
       it "should show an object" do
         object = <<-EOF
@@ -138,7 +137,7 @@ EOF
         response.should == {"id" => 1, "name" => "first"}
       end
     end
-    
+
     describe "#update" do
       it "should update object" do
         response = <<-EOF
@@ -161,7 +160,7 @@ EOF
         # FIXME Add specs that checks for hash in response
       end
     end
-    
+
     describe "#create" do
       it "should create object" do
         response = <<-EOF
@@ -180,7 +179,7 @@ EOF
         result.should == {'id' => 1, 'name' => 'new name'}
       end
     end
-    
+
     describe "#set_contexts" do
       it "should generate url with contexts in it" do
         @service.set_contexts({
@@ -191,7 +190,7 @@ EOF
         url.path.should == "http://chunky.bacon/first_context/123/second_context/456/bacons"
       end
     end
-    
+
     describe "#clear_contexts" do
       it "should reset contexts on a service" do
         @service.set_contexts({
@@ -205,12 +204,12 @@ EOF
         url.path.should == "http://chunky.bacon/bacons"
       end
     end
-    
+
     context "with custom path" do
       before :each do
         @service.add_custom_url(:my_object, :list, "my_objects/all")
       end
-      
+
       describe "#add_custom_url" do
         it "should use custom path for specific object/action" do
           @service.generate_rest_url(:list, :my_object).path.should == "http://chunky.bacon/my_objects/all"
@@ -223,19 +222,19 @@ EOF
         end
       end
     end
-    
+
     context "with custom path and method" do
       before :each do
         @service.add_custom_url(:my_object, :update, "my_objects/update", :post)
       end
-      
+
       it "should generate an url" do
         url = @service.generate_rest_url(:update, :my_object, 1)
         url.should be_a(ServiceUrl)
         url.path.should == 'http://chunky.bacon/my_objects/update'
         url.method.should == :post
       end
-      
+
       it "should make a request" do
         expected_url = 'http://chunky.bacon/my_objects/update'
         stub_request(:post, expected_url)
@@ -243,12 +242,12 @@ EOF
         request(:post, expected_url).should have_been_made
       end
     end
-    
+
     context "with custom root" do
       before :each do
         @service.root = "things/hidden/somewhere/my_objects"
       end
-      
+
       describe "#list" do
         it "should list" do
           object = <<-EOF
@@ -278,7 +277,7 @@ EOF
           ]
         end
       end
-      
+
       describe "#show" do
         it "should show" do
           @service.root = "things/hidden/somewhere/my_object"
@@ -301,7 +300,7 @@ EOF
         end
       end
     end
-    
+
     context "with custom object name" do
       describe "#add_object_name" do
         it "should add object name" do

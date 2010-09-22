@@ -7,7 +7,7 @@ gem 'bson_ext', '1.0.4'
 
 group :development do
   gem 'jeweler'
-  gem 'rspec-core', '>= 2.0.0.beta.12'
+  gem 'rspec', '>= 2.0.0.beta.22'
   gem 'webmock'
   gem 'mocha'
 end
