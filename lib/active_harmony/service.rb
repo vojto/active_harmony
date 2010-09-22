@@ -89,7 +89,7 @@ module ActiveHarmony
       puts "[ActiveHarmony]    URL:      #{url}"
       puts "[ActiveHarmony]    Method:   #{method}"
       puts "[ActiveHarmony]    Headers:  #{headers.inspect}"
-      puts "[ActiveHarmony]    Data:     #{data.inspect}"
+      puts "[ActiveHarmony]    Data:     #{data.inspect}" if data
       if defined?(Rails) && !Rails.env.test?
         data = retrieve_with_typhoeus(url, method, headers, data)
       else

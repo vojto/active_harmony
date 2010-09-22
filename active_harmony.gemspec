@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{active_harmony}
-  s.version = "1.0.0"
+  s.version = "1.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Vojto Rinik"]
-  s.date = %q{2010-09-21}
+  s.date = %q{2010-09-22}
   s.description = %q{Active Harmony is a Ruby library that takes care of synchronizing changes between local Ruby objects and remote REST services.}
   s.email = %q{vojto@rinik.net}
   s.extra_rdoc_files = [
@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".bundle/config",
+     "CHANGELOG",
      "Gemfile",
      "Gemfile.lock",
      "LICENSE",
