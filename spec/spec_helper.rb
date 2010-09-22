@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'webmock'
+require 'webmock/rspec'
 require 'mongoid'
+
 Mongoid.configure do |config|
   name = "active_harmony_test"
   host = "localhost"
